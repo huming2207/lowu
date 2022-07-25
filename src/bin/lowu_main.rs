@@ -9,7 +9,7 @@ use lowu as _; // global logger + panicking-behavior + memory layout
 )]
 mod app {
     use stm32wlxx_hal::{rcc, pac::{self, USART1}, uart::{self, Uart1, NoRx}, gpio::{pins, PortB}};
-    
+    use cortex_m::prelude::_embedded_hal_serial_Write;
 
     // TODO: Add a monotonic if scheduling will be used
     // #[monotonic(binds = SysTick, default = true)]
@@ -24,6 +24,7 @@ mod app {
     // Local resources go here
     #[local]
     struct Local {
+        uart: Uart1<pins::B7, pins::B6>,
         // TODO: Add resources
     }
 
@@ -48,10 +49,10 @@ mod app {
         let gpiob: PortB = PortB::split(dp.GPIOB, &mut dp.RCC);
         let mut uart: Uart1<pins::B7, pins::B6> = Uart1::new(dp.USART1, 115200, uart::Clk::Hsi16, &mut dp.RCC).enable_tx(gpiob.b6, cs).enable_rx(gpiob.b7, cs);
         cortex_m::prelude::_embedded_hal_serial_Write::write(&mut uart, 85);
-        defmt_serial::defmt_serial(uart);
     
 
         defmt::warn!("init");
+
 
         // task1::spawn().ok();
 
@@ -61,7 +62,7 @@ mod app {
                 // Initialization of shared resources go here
             },
             Local {
-                // Initialization of local resources go here
+                uart,
             },
             init::Monotonics(
                 // Initialization of optional monotonic timers go here
@@ -69,8 +70,11 @@ mod app {
         )
     }
 
-    #[idle]
-    fn idle(_: idle::Context) -> ! {
+    #[idle(local=[uart])]
+    fn idle(ctx: idle::Context) -> ! {
+        let uart = ctx.local.uart;
+        defmt_serial::defmt_serial!(uart, &mut uart::Uart1<pins::B7, pins::B6>);
+
         defmt::info!("idle");
 
         loop {
