@@ -93,6 +93,13 @@
 	status = "okay";
 };
 
+&lpuart1 {
+	pinctrl-0 = <&lpuart1_tx_pa2 &lpuart1_rx_pa3>;
+	pinctrl-names = "default";
+	current-speed = <115200>;
+	status = "okay";
+};
+
 &subghzspi {
 	status = "okay";
 	lora: radio@0 {
