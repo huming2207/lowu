@@ -1,0 +1,96 @@
+/*
+* Copyright (C) 2022 Jackson Ming Hu <huming2207@gmail.com>
+*
+* SPDX-License-Identifier: Apache-2.0
+*/
+
+/dts-v1/;
+
+#include <st/wl/stm32wle5Xc.dtsi>
+#include <st/wl/stm32wle5ccux-pinctrl.dtsi>
+
+/ {
+    model = "Lowu Laojie";
+    compatible = "lowu,laojie";
+
+    chosen {
+        zephyr,console = &usart1;
+        // zephyr,shell-uart = &usart1;
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zephyr,code-partition = &flash0;
+    };
+
+
+};
+
+&lptim1 {
+	status = "okay";
+};
+
+&clk_msi {
+	status = "okay";
+	msi-range = <11>;
+};
+
+&rcc {
+	clocks = <&clk_msi>;
+	clock-frequency = <DT_FREQ_M(48)>;
+	cpu1-prescaler = <1>;
+	ahb3-prescaler = <1>;
+	apb1-prescaler = <1>;
+	apb2-prescaler = <1>;
+};
+
+&rtc {
+	status = "okay";
+};
+
+&iwdg {
+	status = "okay";
+};
+
+&aes {
+	status = "okay";
+};
+
+&clk_hse {
+	clock-frequency = <DT_FREQ_M(32)>;
+	hse-tcxo;
+};
+
+&clk_lse {
+	clock-frequency = <32768>;
+};
+
+&usart1 {
+	pinctrl-0 = <&usart1_tx_pb6 &usart1_rx_pb7>;
+	pinctrl-names = "default";
+	current-speed = <115200>;
+	status = "okay";
+};
+
+&subghzspi {
+	status = "okay";
+	lora: radio@0 {
+		status = "okay";
+		tx-enable-gpios = <&gpioa 4 GPIO_ACTIVE_LOW>;
+		rx-enable-gpios = <&gpioa 5 GPIO_ACTIVE_LOW>;
+		dio3-tcxo-voltage = <SX126X_DIO3_TCXO_1V7>;
+		tcxo-power-startup-delay-ms = <5>;
+	};
+};
+
+&flash0 {
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		/* 16KB (8x2kB pages) of storage at the end of the flash */
+		storage_partition: partition@3c000 {
+			label = "storage";
+			reg = <0x0003c000 DT_SIZE_K(16)>;
+		};
+	};
+};

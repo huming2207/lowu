@@ -1,0 +1,6 @@
+if BOARD_LOWU_LAOJIE
+
+config BOARD
+        default "laojie"
+
+endif

@@ -1,0 +1,3 @@
+config BOARD_LOWU_LAOJIE
+	bool "Lowu Laojie"
+	depends on SOC_STM32WLE5XX
