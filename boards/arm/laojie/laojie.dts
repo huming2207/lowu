@@ -104,8 +104,8 @@
 	status = "okay";
 	lora: radio@0 {
 		status = "okay";
-		tx-enable-gpios = <&gpioa 4 GPIO_ACTIVE_LOW>;
-		rx-enable-gpios = <&gpioa 5 GPIO_ACTIVE_LOW>;
+		tx-enable-gpios = <&gpioc 13 GPIO_ACTIVE_HIGH>;
+		rx-enable-gpios = <&gpiob 8 GPIO_ACTIVE_HIGH>;
 		dio3-tcxo-voltage = <SX126X_DIO3_TCXO_1V7>;
 		tcxo-power-startup-delay-ms = <5>;
 	};
