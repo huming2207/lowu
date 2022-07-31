@@ -1,0 +1,2 @@
+config LOWU_RADIO
+    bool "Enable LoWu radio driver"
