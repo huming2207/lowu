@@ -76,21 +76,6 @@
 #define SX126X_GFSK_RX_STATUS_ADRS_ERROR_POS ( 5U )
 #define SX126X_GFSK_RX_STATUS_ADRS_ERROR_MASK ( 0x01UL << SX126X_GFSK_RX_STATUS_ADRS_ERROR_POS )
 
-/*
- * -----------------------------------------------------------------------------
- * --- PUBLIC TYPES ------------------------------------------------------------
- */
-
-/**
- * @brief SX126X APIs return status enumeration definition
- */
-typedef enum sx126x_status_e
-{
-    SX126X_STATUS_OK = 0,
-    SX126X_STATUS_UNSUPPORTED_FEATURE,
-    SX126X_STATUS_UNKNOWN_VALUE,
-    SX126X_STATUS_ERROR,
-} sx126x_status_t;
 
 /**
  * @brief SX126X sleep mode configurations definition
@@ -580,7 +565,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_sleep(sx126x_sleep_cfgs_t cfg);
+    radio::ret set_sleep(sx126x_sleep_cfgs_t cfg);
 
     /**
      * @brief Set the chip in stand-by mode
@@ -590,7 +575,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_standby(sx126x_standby_cfg_t cfg);
+    radio::ret set_standby(sx126x_standby_cfg_t cfg);
 
     /**
      * @brief Set the chip in frequency synthesis mode
@@ -598,7 +583,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_fs();
+    radio::ret set_fs();
 
     /**
      * @brief Set the chip in transmission mode
@@ -615,7 +600,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_tx(uint32_t timeout_in_ms);
+    radio::ret set_tx(uint32_t timeout_in_ms);
 
     /**
      * @brief Set the chip in transmission mode
@@ -637,7 +622,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_tx_with_timeout_in_rtc_step(uint32_t timeout_in_rtc_step);
+    radio::ret set_tx_with_timeout_in_rtc_step(uint32_t timeout_in_rtc_step);
 
     /**
      * @brief Get LoRa coding rate and CRC configurations from received header
@@ -652,7 +637,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_lora_params_from_header(sx126x_lora_cr_t *cr, bool *crc_is_on);
+    radio::ret get_lora_params_from_header(sx126x_lora_cr_t *cr, bool *crc_is_on);
 
     /**
      * @brief Set the chip in reception mode
@@ -673,7 +658,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_rx(uint32_t timeout_in_ms);
+    radio::ret set_rx(uint32_t timeout_in_ms);
 
     /**
      * @brief Set the chip in reception mode
@@ -700,7 +685,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_rx_with_timeout_in_rtc_step(uint32_t timeout_in_rtc_step);
+    radio::ret set_rx_with_timeout_in_rtc_step(uint32_t timeout_in_rtc_step);
 
     /**
      * @brief Configure the event on which the Rx timeout is stopped
@@ -713,7 +698,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t stop_timer_on_preamble(bool enable);
+    radio::ret stop_timer_on_preamble(bool enable);
 
     /**
      * @brief Set the chip in reception mode with duty cycling
@@ -723,7 +708,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_rx_duty_cycle(uint32_t rx_time_in_ms, uint32_t sleep_time_in_ms);
+    radio::ret set_rx_duty_cycle(uint32_t rx_time_in_ms, uint32_t sleep_time_in_ms);
 
     /**
      * @brief Set the chip in reception mode with duty cycling
@@ -741,7 +726,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_rx_duty_cycle_with_timings_in_rtc_step(uint32_t rx_time_in_rtc_step, uint32_t sleep_time_in_rtc_step);
+    radio::ret set_rx_duty_cycle_with_timings_in_rtc_step(uint32_t rx_time_in_rtc_step, uint32_t sleep_time_in_rtc_step);
 
     /**
      * @brief Set the chip in CAD (Channel Activity Detection) mode
@@ -753,7 +738,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_cad();
+    radio::ret set_cad();
 
     /**
      * @brief Set the chip in Tx continuous wave (RF tone).
@@ -763,7 +748,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_tx_cw();
+    radio::ret set_tx_cw();
 
     /**
      * @brief Set the chip in Tx infinite preamble (modulated signal).
@@ -773,7 +758,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_tx_infinite_preamble();
+    radio::ret set_tx_infinite_preamble();
 
     /**
      * @brief Configure the regulator mode to be used
@@ -785,7 +770,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_reg_mode(sx126x_reg_mod_t mode);
+    radio::ret set_reg_mode(sx126x_reg_mod_t mode);
 
     /**
      * @brief Perform the calibration of the requested blocks
@@ -799,7 +784,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t cal(sx126x_cal_mask_t param);
+    radio::ret cal(sx126x_cal_mask_t param);
 
     /**
      * @brief Launch an image calibration valid for all frequencies inside an interval, in steps
@@ -811,7 +796,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t cal_img(uint8_t freq1, const uint8_t freq2);
+    radio::ret cal_img(uint8_t freq1, uint8_t freq2);
 
     /**
      * @brief Launch an image calibration valid for all frequencies inside an interval, in MHz
@@ -823,7 +808,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t cal_img_in_mhz(uint16_t freq1_in_mhz, uint16_t freq2_in_mhz);
+    radio::ret cal_img_in_mhz(uint16_t freq1_in_mhz, uint16_t freq2_in_mhz);
 
     /**
      * @brief Configure the PA (Power Amplifier)
@@ -834,7 +819,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_pa_cfg(sx126x_pa_cfg_params_t *params);
+    radio::ret set_pa_cfg(sx126x_pa_cfg_params_t *params);
 
     /**
      * @brief Set chip mode to be used after successful transmission or reception.
@@ -845,7 +830,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_rx_tx_fallback_mode(sx126x_fallback_modes_t fallback_mode);
+    radio::ret set_rx_tx_fallback_mode(sx126x_fallback_modes_t fallback_mode);
 
     //
     // Registers and Buffer Access
@@ -862,7 +847,7 @@ public:
      *
      * @see sx126x_read_register
      */
-    sx126x_status_t write_register(uint16_t address, const uint8_t *buffer,
+    radio::ret write_register(uint16_t address, const uint8_t *buffer,
                                    uint8_t size);
 
     /**
@@ -876,7 +861,7 @@ public:
      *
      * @see sx126x_write_register
      */
-    sx126x_status_t read_register(uint16_t address, uint8_t *buffer,
+    radio::ret read_register(uint16_t address, uint8_t *buffer,
                                   uint8_t size);
 
     /**
@@ -890,7 +875,7 @@ public:
      *
      * @see sx126x_read_buffer
      */
-    sx126x_status_t write_buffer(uint8_t offset, const uint8_t *buffer,
+    radio::ret write_buffer(uint8_t offset, const uint8_t *buffer,
                                  uint8_t size);
 
     /**
@@ -904,7 +889,7 @@ public:
      *
      * @see sx126x_write_buffer
      */
-    sx126x_status_t read_buffer(uint8_t offset, uint8_t *buffer, const uint8_t size);
+    radio::ret read_buffer(uint8_t offset, uint8_t *buffer, const uint8_t size);
 
     //
     // DIO and IRQ Control Functions
@@ -932,7 +917,7 @@ public:
      *
      * @see sx126x_clear_irq_status, sx126x_get_irq_status, sx126x_set_dio2_as_rf_sw_ctrl, sx126x_set_dio3_as_tcxo_ctrl
      */
-    sx126x_status_t set_dio_irq_params(uint16_t irq_mask, uint16_t dio1_mask, uint16_t dio2_mask, uint16_t dio3_mask);
+    radio::ret set_dio_irq_params(uint16_t irq_mask, uint16_t dio1_mask, uint16_t dio2_mask, uint16_t dio3_mask);
 
     /**
      * @brief Get system interrupt status
@@ -943,7 +928,7 @@ public:
      *
      * @see sx126x_clear_irq_status
      */
-    sx126x_status_t get_irq_status(sx126x_irq_mask_t *irq);
+    radio::ret get_irq_status(sx126x_irq_mask_t *irq);
 
     /**
      * @brief Clear selected system interrupts
@@ -954,7 +939,7 @@ public:
      *
      * @see sx126x_get_irq_status
      */
-    sx126x_status_t clear_irq_status(sx126x_irq_mask_t irq_mask);
+    radio::ret clear_irq_status(sx126x_irq_mask_t irq_mask);
 
     /**
      * @brief Clears any radio irq status flags that are set and returns the flags that
@@ -964,7 +949,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_and_clear_irq_status(sx126x_irq_mask_t *irq);
+    radio::ret get_and_clear_irq_status(sx126x_irq_mask_t *irq);
 
     /**
      * @brief Configure the embedded RF switch control
@@ -973,7 +958,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_dio2_as_rf_sw_ctrl(bool enable);
+    radio::ret set_dio2_as_rf_sw_ctrl(bool enable);
 
     /**
      * @brief Configure the embedded TCXO switch control
@@ -988,7 +973,7 @@ public:
      * @returns Operation status
      *
      */
-    sx126x_status_t set_dio3_as_tcxo_ctrl(sx126x_tcxo_ctrl_voltages_t tcxo_voltage,
+    radio::ret set_dio3_as_tcxo_ctrl(sx126x_tcxo_ctrl_voltages_t tcxo_voltage,
                                           uint32_t timeout);
 
     //
@@ -1004,7 +989,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_rf_freq(uint32_t freq_in_hz);
+    radio::ret set_rf_freq(uint32_t freq_in_hz);
 
     /**
      * @brief Set the RF frequency for future radio operations - parameter in PLL steps
@@ -1015,7 +1000,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_rf_freq_in_pll_steps(uint32_t freq);
+    radio::ret set_rf_freq_in_pll_steps(uint32_t freq);
 
     /**
      * @brief Set the packet type
@@ -1025,7 +1010,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_pkt_type(sx126x_pkt_type_t pkt_type);
+    radio::ret set_pkt_type(sx126x_pkt_type_t pkt_type);
 
     /**
      * @brief Get the current packet type
@@ -1034,7 +1019,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_pkt_type(sx126x_pkt_type_t *pkt_type);
+    radio::ret get_pkt_type(sx126x_pkt_type_t *pkt_type);
 
     /**
      * @brief Set the parameters for TX power and power amplifier ramp time
@@ -1044,8 +1029,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_tx_params(int8_t pwr_in_dbm,
-                                  const sx126x_ramp_time_t ramp_time);
+    radio::ret set_tx_params(int8_t pwr_in_dbm, sx126x_ramp_time_t ramp_time);
 
     /**
      * @brief Set the modulation parameters for GFSK packets
@@ -1057,7 +1041,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_gfsk_mod_params(sx126x_mod_params_gfsk_t *params);
+    radio::ret set_gfsk_mod_params(sx126x_mod_params_gfsk_t *params);
 
     /**
      * @brief Set the modulation parameters for LoRa packets
@@ -1068,7 +1052,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_lora_mod_params(sx126x_mod_params_lora_t *params);
+    radio::ret set_lora_mod_params(sx126x_mod_params_lora_t *params);
 
     /**
      * @brief Set the packet parameters for GFSK packets
@@ -1080,7 +1064,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_gfsk_pkt_params(sx126x_pkt_params_gfsk_t *params);
+    radio::ret set_gfsk_pkt_params(sx126x_pkt_params_gfsk_t *params);
 
     /**
      * @brief Set the packet parameters for LoRa packets
@@ -1091,7 +1075,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_lora_pkt_params(sx126x_pkt_params_lora_t *params);
+    radio::ret set_lora_pkt_params(sx126x_pkt_params_lora_t *params);
 
     /**
      * @brief Set the parameters for CAD operation
@@ -1102,7 +1086,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_cad_params(sx126x_cad_params_t *params);
+    radio::ret set_cad_params(sx126x_cad_params_t *params);
 
     /**
      * @brief Set buffer start addresses for both Tx and Rx operations
@@ -1112,7 +1096,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_buffer_base_address(uint8_t tx_base_address,
+    radio::ret set_buffer_base_address(uint8_t tx_base_address,
                                             const uint8_t rx_base_address);
 
     /**
@@ -1125,7 +1109,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_lora_symb_nb_timeout(uint8_t nb_of_symbs);
+    radio::ret set_lora_symb_nb_timeout(uint8_t nb_of_symbs);
 
     //
     // Communication Status Information
@@ -1138,7 +1122,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_status(sx126x_chip_status_t *radio_status);
+    radio::ret get_status(sx126x_chip_status_t *radio_status);
 
     /**
      * @brief Get the current Rx buffer status for both LoRa and GFSK Rx operations
@@ -1150,7 +1134,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_rx_buffer_status(sx126x_rx_buffer_status_t *rx_buffer_status);
+    radio::ret get_rx_buffer_status(sx126x_rx_buffer_status_t *rx_buffer_status);
 
     /**
      * @brief Get the status of the last GFSK packet received
@@ -1159,7 +1143,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_gfsk_pkt_status(sx126x_pkt_status_gfsk_t *pkt_status);
+    radio::ret get_gfsk_pkt_status(sx126x_pkt_status_gfsk_t *pkt_status);
 
     /**
      * @brief Get the status of the last LoRa packet received
@@ -1168,7 +1152,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_lora_pkt_status(sx126x_pkt_status_lora_t *pkt_status);
+    radio::ret get_lora_pkt_status(sx126x_pkt_status_lora_t *pkt_status);
 
     /**
      * @brief Get the instantaneous RSSI value.
@@ -1181,7 +1165,7 @@ public:
      *
      * @see sx126x_set_rx
      */
-    sx126x_status_t get_rssi_inst(int16_t *rssi_in_dbm);
+    radio::ret get_rssi_inst(int16_t *rssi_in_dbm);
 
     /**
      * @brief Get the statistics about GFSK communication
@@ -1190,7 +1174,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_gfsk_stats(sx126x_stats_gfsk_t *stats);
+    radio::ret get_gfsk_stats(sx126x_stats_gfsk_t *stats);
 
     /**
      * @brief Get the statistics about LoRa communication
@@ -1199,7 +1183,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_lora_stats(sx126x_stats_lora_t *stats);
+    radio::ret get_lora_stats(sx126x_stats_lora_t *stats);
 
     /**
      * @brief Reset all the statistics for both Lora and GFSK communications
@@ -1207,7 +1191,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t reset_stats();
+    radio::ret reset_stats();
 
     //
     // Miscellaneous
@@ -1237,7 +1221,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_device_errors(sx126x_errors_mask_t *errors);
+    radio::ret get_device_errors(sx126x_errors_mask_t *errors);
 
     /**
      * @brief Clear all active errors
@@ -1245,7 +1229,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t clear_device_errors();
+    radio::ret clear_device_errors();
 
     /**
      * @brief Get the parameter corresponding to a GFSK Rx bandwith immediately above the minimum requested one.
@@ -1255,7 +1239,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t get_gfsk_bw_param(uint32_t bw, uint8_t *param);
+    radio::ret get_gfsk_bw_param(uint32_t bw, uint8_t *param);
 
     /**
      * @brief Get the actual value in Hertz of a given LoRa bandwidth
@@ -1331,7 +1315,7 @@ public:
      * Please note that the random numbers produced by the generator do not have a uniform or Gaussian distribution. If
      * uniformity is needed, perform appropriate software post-processing.
      */
-    sx126x_status_t get_random_numbers(uint32_t *numbers, unsigned int n);
+    radio::ret get_random_numbers(uint32_t *numbers, unsigned int n);
 
 
     /**
@@ -1344,7 +1328,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t cfg_rx_boosted(bool state);
+    radio::ret cfg_rx_boosted(bool state);
 
     /**
      * @brief Configure the sync word used in GFSK packet
@@ -1354,7 +1338,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_gfsk_sync_word(uint8_t *sync_word, const uint8_t sync_word_len);
+    radio::ret set_gfsk_sync_word(uint8_t *sync_word, const uint8_t sync_word_len);
 
     /**
      * @brief Configure the sync word used in LoRa packet
@@ -1367,7 +1351,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_lora_sync_word(uint8_t sync_word);
+    radio::ret set_lora_sync_word(uint8_t sync_word);
 
     /**
      * @brief Configure the seed used to compute CRC in GFSK packet
@@ -1376,7 +1360,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_gfsk_crc_seed(uint16_t seed);
+    radio::ret set_gfsk_crc_seed(uint16_t seed);
 
     /**
      * @brief Configure the polynomial used to compute CRC in GFSK packet
@@ -1385,7 +1369,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_gfsk_crc_polynomial(uint16_t polynomial);
+    radio::ret set_gfsk_crc_polynomial(uint16_t polynomial);
 
     /**
      * @brief Configure the whitening seed used in GFSK packet
@@ -1394,7 +1378,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_gfsk_whitening_seed(uint16_t seed);
+    radio::ret set_gfsk_whitening_seed(uint16_t seed);
 
     /**
      * @brief Configure the Tx PA clamp
@@ -1406,7 +1390,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t cfg_tx_clamp();
+    radio::ret cfg_tx_clamp();
 
     /**
      * @brief Stop the RTC and clear the related event
@@ -1417,7 +1401,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t stop_rtc();
+    radio::ret stop_rtc();
 
     /**
      * @brief Configure the Over Current Protection (OCP) value
@@ -1428,7 +1412,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_ocp_value(uint8_t ocp_in_step_of_2_5_ma);
+    radio::ret set_ocp_value(uint8_t ocp_in_step_of_2_5_ma);
 
     /**
      * @brief Configure the internal trimming capacitor values
@@ -1441,7 +1425,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t set_trimming_capacitor_values(uint8_t trimming_cap_xta,
+    radio::ret set_trimming_capacitor_values(uint8_t trimming_cap_xta,
                                                   const uint8_t trimming_cap_xtb);
 
     /**
@@ -1457,7 +1441,7 @@ public:
      *
      * @returns Operation status
      */
-    sx126x_status_t add_registers_to_retention_list(uint16_t *register_addr, uint8_t register_nb);
+    radio::ret add_registers_to_retention_list(uint16_t *register_addr, uint8_t register_nb);
 
     /**
      * @brief Add SX126X_REG_RXGAIN, SX126X_REG_TX_MODULATION and SX126X_REG_IQ_POLARITY registers to the retention list
@@ -1472,13 +1456,13 @@ public:
      *
      * @see sx126x_add_registers_to_retention_list
      */
-    sx126x_status_t init_retention_list();
+    radio::ret init_retention_list();
 
 
 private:
     static inline uint32_t get_gfsk_crc_len_in_bytes(sx126x_gfsk_crc_types_t crc_type);
 
-    sx126x_status_t tx_modulation_workaround(sx126x_pkt_type_t pkt_type, sx126x_lora_bw_t bw);
+    radio::ret tx_modulation_workaround(sx126x_pkt_type_t pkt_type, sx126x_lora_bw_t bw);
 
     /**
      * @brief Get the number of PLL steps for a given frequency in Hertz

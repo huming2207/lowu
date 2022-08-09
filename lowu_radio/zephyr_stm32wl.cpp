@@ -3,30 +3,30 @@
 #include "zephyr_glue.h"
 
 #include <stm32wlxx_ll_exti.h>
-#include <stm32wlxx_ll_pwr.h>
 #include <stm32wlxx_ll_rcc.h>
+#include <logging/log.h>
 
 zephyr_stm32wl::zephyr_stm32wl()
 {
-    spi = &lora_spi;
+    spi = (spi_dt_spec *)&lora_spi;
 }
 
-bool zephyr_stm32wl::reset()
+radio::ret zephyr_stm32wl::reset()
 {
     LL_RCC_RF_EnableReset();
     k_sleep(K_MSEC(20));
     LL_RCC_RF_DisableReset();
     k_sleep(K_MSEC(10));
 
-    return true;
+    return radio::OK;
 }
 
-bool zephyr_stm32wl::wakeup()
+radio::ret zephyr_stm32wl::wakeup()
 {
-    return true; // Does nothing???
+    return radio::OK; // Does nothing???
 }
 
-int zephyr_stm32wl::write(const uint8_t *cmd, const uint16_t cmd_len, const uint8_t *data, const uint16_t data_len)
+radio::ret zephyr_stm32wl::write(const uint8_t *cmd, const uint16_t cmd_len, const uint8_t *data, const uint16_t data_len)
 {
     const struct spi_buf tx_buf[] = {
             {
@@ -44,10 +44,16 @@ int zephyr_stm32wl::write(const uint8_t *cmd, const uint16_t cmd_len, const uint
             .count = ARRAY_SIZE(tx_buf),
     };
 
-    return spi_write_dt(spi, &tx);
+    auto ret = spi_write_dt(spi, &tx);
+    if (ret < 0) {
+        LOG_ERR("SPI write returned: %d", ret);
+        return radio::ERROR;
+    }
+
+    return radio::OK;
 }
 
-int zephyr_stm32wl::read(const uint8_t *cmd, const uint16_t cmd_len, uint8_t *data, uint16_t data_len)
+radio::ret zephyr_stm32wl::read(const uint8_t *cmd, const uint16_t cmd_len, uint8_t *data, uint16_t data_len)
 {
     const struct spi_buf tx_buf[] = {
             {
@@ -73,10 +79,16 @@ int zephyr_stm32wl::read(const uint8_t *cmd, const uint16_t cmd_len, uint8_t *da
             .count = ARRAY_SIZE(rx_buf),
     };
 
-    return spi_transceive_dt(spi, &tx, &rx);
+    auto ret = spi_transceive_dt(spi, &tx, &rx);
+    if (ret < 0) {
+        LOG_ERR("SPI read returned: %d", ret);
+        return radio::ERROR;
+    }
+
+    return radio::OK;
 }
 
-bool zephyr_stm32wl::init()
+radio::ret zephyr_stm32wl::init()
 {
-    return true;
+    return radio::OK;
 }

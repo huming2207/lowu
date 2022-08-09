@@ -9,14 +9,23 @@
 class zephyr_stm32wl : public radio_hal
 {
 public:
-    zephyr_stm32wl();
-    bool init() override;
-    bool reset() override;
-    bool wakeup() override;
-    int write(const uint8_t* cmd, uint16_t cmd_len, const uint8_t* data, uint16_t data_len) override;
-    int read(const uint8_t* cmd, uint16_t cmd_len, uint8_t* data, uint16_t data_len) override;
+    static zephyr_stm32wl *instance()
+    {
+        static zephyr_stm32wl _instance;
+        return &_instance;
+    }
+
+    void operator=(zephyr_stm32wl const&) = delete;
+    zephyr_stm32wl(zephyr_stm32wl const&) = delete;
+
+    radio::ret init() override;
+    radio::ret reset() override;
+    radio::ret wakeup() override;
+    radio::ret write(const uint8_t* cmd, uint16_t cmd_len, const uint8_t* data, uint16_t data_len) override;
+    radio::ret read(const uint8_t* cmd, uint16_t cmd_len, uint8_t* data, uint16_t data_len) override;
 
 private:
+    zephyr_stm32wl();
     spi_dt_spec *spi = nullptr;
     gpio_dt_spec *tx_enable = nullptr;
     gpio_dt_spec *rx_enable = nullptr;

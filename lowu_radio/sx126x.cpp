@@ -230,39 +230,39 @@ gfsk_bw_t gfsk_bw[] = {
         {467000, SX126X_GFSK_BW_467000},
 };
 
-sx126x_status_t sx126x::set_sleep(const sx126x_sleep_cfgs_t cfg)
+radio::ret sx126x::set_sleep(const sx126x_sleep_cfgs_t cfg)
 {
     const uint8_t buf[SX126X_SIZE_SET_SLEEP] = {
             SX126X_SET_SLEEP,
             (uint8_t) cfg,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_SLEEP, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_SLEEP, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_standby(const sx126x_standby_cfg_t cfg)
+radio::ret sx126x::set_standby(const sx126x_standby_cfg_t cfg)
 {
     const uint8_t buf[SX126X_SIZE_SET_STANDBY] = {
             SX126X_SET_STANDBY,
             (uint8_t) cfg,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_STANDBY, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_STANDBY, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_fs()
+radio::ret sx126x::set_fs()
 {
     const uint8_t buf[SX126X_SIZE_SET_FS] = {
             SX126X_SET_FS,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_FS, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_FS, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_tx(const uint32_t timeout_in_ms)
+radio::ret sx126x::set_tx(const uint32_t timeout_in_ms)
 {
     if (timeout_in_ms > SX126X_MAX_TIMEOUT_IN_MS) {
-        return SX126X_STATUS_UNKNOWN_VALUE;
+        return radio::ret::UNKNOWN_VALUE;
     }
 
     const uint32_t timeout_in_rtc_step = convert_timeout_in_ms_to_rtc_step(timeout_in_ms);
@@ -270,7 +270,7 @@ sx126x_status_t sx126x::set_tx(const uint32_t timeout_in_ms)
     return set_tx_with_timeout_in_rtc_step(timeout_in_rtc_step);
 }
 
-sx126x_status_t sx126x::set_tx_with_timeout_in_rtc_step(const uint32_t timeout_in_rtc_step)
+radio::ret sx126x::set_tx_with_timeout_in_rtc_step(const uint32_t timeout_in_rtc_step)
 {
     const uint8_t buf[SX126X_SIZE_SET_TX] = {
             SX126X_SET_TX,
@@ -279,13 +279,13 @@ sx126x_status_t sx126x::set_tx_with_timeout_in_rtc_step(const uint32_t timeout_i
             (uint8_t) (timeout_in_rtc_step >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_TX, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_TX, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_rx(const uint32_t timeout_in_ms)
+radio::ret sx126x::set_rx(const uint32_t timeout_in_ms)
 {
     if (timeout_in_ms > SX126X_MAX_TIMEOUT_IN_MS) {
-        return SX126X_STATUS_UNKNOWN_VALUE;
+        return radio::ret::UNKNOWN_VALUE;
     }
 
     const uint32_t timeout_in_rtc_step = convert_timeout_in_ms_to_rtc_step(timeout_in_ms);
@@ -293,7 +293,7 @@ sx126x_status_t sx126x::set_rx(const uint32_t timeout_in_ms)
     return set_rx_with_timeout_in_rtc_step(timeout_in_rtc_step);
 }
 
-sx126x_status_t sx126x::set_rx_with_timeout_in_rtc_step(const uint32_t timeout_in_rtc_step)
+radio::ret sx126x::set_rx_with_timeout_in_rtc_step(const uint32_t timeout_in_rtc_step)
 {
     const uint8_t buf[SX126X_SIZE_SET_RX] = {
             SX126X_SET_RX,
@@ -302,20 +302,20 @@ sx126x_status_t sx126x::set_rx_with_timeout_in_rtc_step(const uint32_t timeout_i
             (uint8_t) (timeout_in_rtc_step >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_RX, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_RX, nullptr, 0);
 }
 
-sx126x_status_t sx126x::stop_timer_on_preamble(const bool enable)
+radio::ret sx126x::stop_timer_on_preamble(const bool enable)
 {
     const uint8_t buf[SX126X_SIZE_SET_STOP_TIMER_ON_PREAMBLE] = {
             SX126X_SET_STOP_TIMER_ON_PREAMBLE,
             (uint8_t) (enable ? 1u : 0u),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_STOP_TIMER_ON_PREAMBLE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_STOP_TIMER_ON_PREAMBLE, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_rx_duty_cycle(const uint32_t rx_time_in_ms,
+radio::ret sx126x::set_rx_duty_cycle(const uint32_t rx_time_in_ms,
                                           const uint32_t sleep_time_in_ms)
 {
     const uint32_t rx_time_in_rtc_step = convert_timeout_in_ms_to_rtc_step(rx_time_in_ms);
@@ -324,7 +324,7 @@ sx126x_status_t sx126x::set_rx_duty_cycle(const uint32_t rx_time_in_ms,
     return set_rx_duty_cycle_with_timings_in_rtc_step(rx_time_in_rtc_step, sleep_time_in_rtc_step);
 }
 
-sx126x_status_t sx126x::set_rx_duty_cycle_with_timings_in_rtc_step(const uint32_t rx_time_in_rtc_step, const uint32_t sleep_time_in_rtc_step)
+radio::ret sx126x::set_rx_duty_cycle_with_timings_in_rtc_step(const uint32_t rx_time_in_rtc_step, const uint32_t sleep_time_in_rtc_step)
 {
     const uint8_t buf[SX126X_SIZE_SET_RX_DUTY_CYCLE] = {
             SX126X_SET_RX_DUTY_CYCLE,
@@ -336,57 +336,57 @@ sx126x_status_t sx126x::set_rx_duty_cycle_with_timings_in_rtc_step(const uint32_
             (uint8_t) (sleep_time_in_rtc_step >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_RX_DUTY_CYCLE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_RX_DUTY_CYCLE, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_cad()
+radio::ret sx126x::set_cad()
 {
     const uint8_t buf[SX126X_SIZE_SET_CAD] = {
             SX126X_SET_CAD,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_CAD, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_CAD, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_tx_cw()
+radio::ret sx126x::set_tx_cw()
 {
     const uint8_t buf[SX126X_SIZE_SET_TX_CONTINUOUS_WAVE] = {
             SX126X_SET_TX_CONTINUOUS_WAVE,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_TX_CONTINUOUS_WAVE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_TX_CONTINUOUS_WAVE, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_tx_infinite_preamble()
+radio::ret sx126x::set_tx_infinite_preamble()
 {
     const uint8_t buf[SX126X_SIZE_SET_TX_INFINITE_PREAMBLE] = {
             SX126X_SET_TX_INFINITE_PREAMBLE,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_TX_INFINITE_PREAMBLE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_TX_INFINITE_PREAMBLE, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_reg_mode(const sx126x_reg_mod_t mode)
+radio::ret sx126x::set_reg_mode(const sx126x_reg_mod_t mode)
 {
     const uint8_t buf[SX126X_SIZE_SET_REGULATOR_MODE] = {
             SX126X_SET_REGULATOR_MODE,
             (uint8_t) mode,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_REGULATOR_MODE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_REGULATOR_MODE, nullptr, 0);
 }
 
-sx126x_status_t sx126x::cal(const sx126x_cal_mask_t param)
+radio::ret sx126x::cal(const sx126x_cal_mask_t param)
 {
     const uint8_t buf[SX126X_SIZE_CALIBRATE] = {
             SX126X_CALIBRATE,
             (uint8_t) param,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_CALIBRATE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_CALIBRATE, nullptr, 0);
 }
 
-sx126x_status_t sx126x::cal_img(const uint8_t freq1, const uint8_t freq2)
+radio::ret sx126x::cal_img(const uint8_t freq1, const uint8_t freq2)
 {
     const uint8_t buf[SX126X_SIZE_CALIBRATE_IMAGE] = {
             SX126X_CALIBRATE_IMAGE,
@@ -394,10 +394,10 @@ sx126x_status_t sx126x::cal_img(const uint8_t freq1, const uint8_t freq2)
             freq2,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_CALIBRATE_IMAGE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_CALIBRATE_IMAGE, nullptr, 0);
 }
 
-sx126x_status_t sx126x::cal_img_in_mhz(const uint16_t freq1_in_mhz, const uint16_t freq2_in_mhz)
+radio::ret sx126x::cal_img_in_mhz(const uint16_t freq1_in_mhz, const uint16_t freq2_in_mhz)
 {
     // Perform a floor() to get a value for freq1 corresponding to a frequency lower than or equal to freq1_in_mhz
     const uint8_t freq1 = freq1_in_mhz / SX126X_IMAGE_CALIBRATION_STEP_IN_MHZ;
@@ -409,30 +409,30 @@ sx126x_status_t sx126x::cal_img_in_mhz(const uint16_t freq1_in_mhz, const uint16
     return cal_img(freq1, freq2);
 }
 
-sx126x_status_t sx126x::set_pa_cfg(sx126x_pa_cfg_params_t *params)
+radio::ret sx126x::set_pa_cfg(sx126x_pa_cfg_params_t *params)
 {
     const uint8_t buf[SX126X_SIZE_SET_PA_CFG] = {
             SX126X_SET_PA_CFG, params->pa_duty_cycle, params->hp_max, params->device_sel, params->pa_lut,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_PA_CFG, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_PA_CFG, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_rx_tx_fallback_mode(const sx126x_fallback_modes_t fallback_mode)
+radio::ret sx126x::set_rx_tx_fallback_mode(const sx126x_fallback_modes_t fallback_mode)
 {
     const uint8_t buf[SX126X_SIZE_SET_RX_TX_FALLBACK_MODE] = {
             SX126X_SET_RX_TX_FALLBACK_MODE,
             (uint8_t) fallback_mode,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_RX_TX_FALLBACK_MODE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_RX_TX_FALLBACK_MODE, nullptr, 0);
 }
 
 //
 // Registers and buffer Access
 //
 
-sx126x_status_t sx126x::write_register(const uint16_t address, const uint8_t *buffer,
+radio::ret sx126x::write_register(const uint16_t address, const uint8_t *buffer,
                                        const uint8_t size)
 {
     const uint8_t buf[SX126X_SIZE_WRITE_REGISTER] = {
@@ -441,10 +441,10 @@ sx126x_status_t sx126x::write_register(const uint16_t address, const uint8_t *bu
             (uint8_t) (address >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_WRITE_REGISTER, buffer, size);
+    return hal->write(buf, SX126X_SIZE_WRITE_REGISTER, buffer, size);
 }
 
-sx126x_status_t sx126x::read_register(const uint16_t address, uint8_t *buffer, const uint8_t size)
+radio::ret sx126x::read_register(const uint16_t address, uint8_t *buffer, const uint8_t size)
 {
     const uint8_t buf[SX126X_SIZE_READ_REGISTER] = {
             SX126X_READ_REGISTER,
@@ -453,10 +453,10 @@ sx126x_status_t sx126x::read_register(const uint16_t address, uint8_t *buffer, c
             SX126X_NOP,
     };
 
-    return (sx126x_status_t) hal->read(buf, SX126X_SIZE_READ_REGISTER, buffer, size);
+    return hal->read(buf, SX126X_SIZE_READ_REGISTER, buffer, size);
 }
 
-sx126x_status_t sx126x::write_buffer(const uint8_t offset, const uint8_t *buffer,
+radio::ret sx126x::write_buffer(const uint8_t offset, const uint8_t *buffer,
                                      const uint8_t size)
 {
     const uint8_t buf[SX126X_SIZE_WRITE_BUFFER] = {
@@ -464,10 +464,10 @@ sx126x_status_t sx126x::write_buffer(const uint8_t offset, const uint8_t *buffer
             offset,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_WRITE_BUFFER, buffer, size);
+    return hal->write(buf, SX126X_SIZE_WRITE_BUFFER, buffer, size);
 }
 
-sx126x_status_t sx126x::read_buffer(const uint8_t offset, uint8_t *buffer, const uint8_t size)
+radio::ret sx126x::read_buffer(const uint8_t offset, uint8_t *buffer, const uint8_t size)
 {
     const uint8_t buf[SX126X_SIZE_READ_BUFFER] = {
             SX126X_READ_BUFFER,
@@ -475,13 +475,13 @@ sx126x_status_t sx126x::read_buffer(const uint8_t offset, uint8_t *buffer, const
             SX126X_NOP,
     };
 
-    return (sx126x_status_t) hal->read(buf, SX126X_SIZE_READ_BUFFER, buffer, size);
+    return hal->read(buf, SX126X_SIZE_READ_BUFFER, buffer, size);
 }
 
 //
 // DIO and IRQ Control Functions
 //
-sx126x_status_t sx126x::set_dio_irq_params(const uint16_t irq_mask, const uint16_t dio1_mask,
+radio::ret sx126x::set_dio_irq_params(const uint16_t irq_mask, const uint16_t dio1_mask,
                                            const uint16_t dio2_mask, const uint16_t dio3_mask)
 {
     const uint8_t buf[SX126X_SIZE_SET_DIO_IRQ_PARAMS] = {
@@ -490,29 +490,29 @@ sx126x_status_t sx126x::set_dio_irq_params(const uint16_t irq_mask, const uint16
             (uint8_t) (dio2_mask >> 0), (uint8_t) (dio3_mask >> 8), (uint8_t) (dio3_mask >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_DIO_IRQ_PARAMS, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_DIO_IRQ_PARAMS, nullptr, 0);
 }
 
-sx126x_status_t sx126x::get_irq_status(sx126x_irq_mask_t *irq)
+radio::ret sx126x::get_irq_status(sx126x_irq_mask_t *irq)
 {
     const uint8_t buf[SX126X_SIZE_GET_IRQ_STATUS] = {
             SX126X_GET_IRQ_STATUS,
             SX126X_NOP,
     };
     uint8_t irq_local[sizeof(sx126x_irq_mask_t)] = {0x00};
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_IRQ_STATUS, irq_local,
+    status = hal->read(buf, SX126X_SIZE_GET_IRQ_STATUS, irq_local,
                                                sizeof(sx126x_irq_mask_t));
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         *irq = ((sx126x_irq_mask_t) irq_local[0] << 8) + ((sx126x_irq_mask_t) irq_local[1] << 0);
     }
 
     return status;
 }
 
-sx126x_status_t sx126x::clear_irq_status(const sx126x_irq_mask_t irq_mask)
+radio::ret sx126x::clear_irq_status(const sx126x_irq_mask_t irq_mask)
 {
     const uint8_t buf[SX126X_SIZE_CLR_IRQ_STATUS] = {
             SX126X_CLR_IRQ_STATUS,
@@ -520,35 +520,35 @@ sx126x_status_t sx126x::clear_irq_status(const sx126x_irq_mask_t irq_mask)
             (uint8_t) (irq_mask >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_CLR_IRQ_STATUS, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_CLR_IRQ_STATUS, nullptr, 0);
 }
 
-sx126x_status_t sx126x::get_and_clear_irq_status(sx126x_irq_mask_t *irq)
+radio::ret sx126x::get_and_clear_irq_status(sx126x_irq_mask_t *irq)
 {
     sx126x_irq_mask_t sx126x_irq_mask = SX126X_IRQ_NONE;
 
-    sx126x_status_t status = get_irq_status(&sx126x_irq_mask);
+    radio::ret status = get_irq_status(&sx126x_irq_mask);
 
-    if ((status == SX126X_STATUS_OK) && (sx126x_irq_mask != 0)) {
+    if ((status == radio::ret::OK) && (sx126x_irq_mask != 0)) {
         status = clear_irq_status(sx126x_irq_mask);
     }
-    if ((status == SX126X_STATUS_OK) && (irq != NULL)) {
+    if ((status == radio::ret::OK) && (irq != nullptr)) {
         *irq = sx126x_irq_mask;
     }
     return status;
 }
 
-sx126x_status_t sx126x::set_dio2_as_rf_sw_ctrl(const bool enable)
+radio::ret sx126x::set_dio2_as_rf_sw_ctrl(const bool enable)
 {
     const uint8_t buf[SX126X_SIZE_SET_DIO2_AS_RF_SWITCH_CTRL] = {
             SX126X_SET_DIO2_AS_RF_SWITCH_CTRL,
             (uint8_t) (enable ? 1 : 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_DIO2_AS_RF_SWITCH_CTRL, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_DIO2_AS_RF_SWITCH_CTRL, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_dio3_as_tcxo_ctrl(const sx126x_tcxo_ctrl_voltages_t tcxo_voltage,
+radio::ret sx126x::set_dio3_as_tcxo_ctrl(const sx126x_tcxo_ctrl_voltages_t tcxo_voltage,
                                               const uint32_t timeout)
 {
     const uint8_t buf[SX126X_SIZE_SET_DIO3_AS_TCXO_CTRL] = {
@@ -556,50 +556,50 @@ sx126x_status_t sx126x::set_dio3_as_tcxo_ctrl(const sx126x_tcxo_ctrl_voltages_t 
             (uint8_t) (timeout >> 8), (uint8_t) (timeout >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_DIO3_AS_TCXO_CTRL, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_DIO3_AS_TCXO_CTRL, nullptr, 0);
 }
 
 //
 // RF Modulation and Packet-Related Functions
 //
 
-sx126x_status_t sx126x::set_rf_freq(const uint32_t freq_in_hz)
+radio::ret sx126x::set_rf_freq(const uint32_t freq_in_hz)
 {
     const uint32_t freq = convert_freq_in_hz_to_pll_step(freq_in_hz);
     return set_rf_freq_in_pll_steps(freq);
 }
 
-sx126x_status_t sx126x::set_rf_freq_in_pll_steps(const uint32_t freq)
+radio::ret sx126x::set_rf_freq_in_pll_steps(const uint32_t freq)
 {
     const uint8_t buf[SX126X_SIZE_SET_RF_FREQUENCY] = {
             SX126X_SET_RF_FREQUENCY, (uint8_t) (freq >> 24), (uint8_t) (freq >> 16),
             (uint8_t) (freq >> 8), (uint8_t) (freq >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_RF_FREQUENCY, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_RF_FREQUENCY, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_pkt_type(const sx126x_pkt_type_t pkt_type)
+radio::ret sx126x::set_pkt_type(const sx126x_pkt_type_t pkt_type)
 {
     const uint8_t buf[SX126X_SIZE_SET_PKT_TYPE] = {
             SX126X_SET_PKT_TYPE,
             (uint8_t) pkt_type,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_PKT_TYPE, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_PKT_TYPE, nullptr, 0);
 }
 
-sx126x_status_t sx126x::get_pkt_type(sx126x_pkt_type_t *pkt_type)
+radio::ret sx126x::get_pkt_type(sx126x_pkt_type_t *pkt_type)
 {
     const uint8_t buf[SX126X_SIZE_GET_PKT_TYPE] = {
             SX126X_GET_PKT_TYPE,
             SX126X_NOP,
     };
 
-    return (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_PKT_TYPE, (uint8_t *) pkt_type, 1);
+    return hal->read(buf, SX126X_SIZE_GET_PKT_TYPE, (uint8_t *) pkt_type, 1);
 }
 
-sx126x_status_t sx126x::set_tx_params(const int8_t pwr_in_dbm, const sx126x_ramp_time_t ramp_time)
+radio::ret sx126x::set_tx_params(const int8_t pwr_in_dbm, const sx126x_ramp_time_t ramp_time)
 {
     const uint8_t buf[SX126X_SIZE_SET_TX_PARAMS] = {
             SX126X_SET_TX_PARAMS,
@@ -607,12 +607,12 @@ sx126x_status_t sx126x::set_tx_params(const int8_t pwr_in_dbm, const sx126x_ramp
             (uint8_t) ramp_time,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_TX_PARAMS, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_TX_PARAMS, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_gfsk_mod_params(sx126x_mod_params_gfsk_t *params)
+radio::ret sx126x::set_gfsk_mod_params(sx126x_mod_params_gfsk_t *params)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     const uint32_t bitrate = (uint32_t) (32 * SX126X_XTAL_FREQ / params->br_in_bps);
     const uint32_t fdev = convert_freq_in_hz_to_pll_step(params->fdev_in_hz);
     const uint8_t buf[SX126X_SIZE_SET_MODULATION_PARAMS_GFSK] = {
@@ -621,9 +621,9 @@ sx126x_status_t sx126x::set_gfsk_mod_params(sx126x_mod_params_gfsk_t *params)
             (uint8_t) (fdev >> 16), (uint8_t) (fdev >> 8), (uint8_t) (fdev >> 0),
     };
 
-    status = (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_MODULATION_PARAMS_GFSK, nullptr, 0);
+    status = hal->write(buf, SX126X_SIZE_SET_MODULATION_PARAMS_GFSK, nullptr, 0);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         // WORKAROUND - Modulation Quality with 500 kHz LoRa Bandwidth, see DS_SX1261-2_V1.2 datasheet chapter 15.1
         status = tx_modulation_workaround(SX126X_PKT_TYPE_GFSK, (sx126x_lora_bw_t) 0);
         // WORKAROUND END
@@ -631,17 +631,17 @@ sx126x_status_t sx126x::set_gfsk_mod_params(sx126x_mod_params_gfsk_t *params)
     return status;
 }
 
-sx126x_status_t sx126x::set_lora_mod_params(sx126x_mod_params_lora_t *params)
+radio::ret sx126x::set_lora_mod_params(sx126x_mod_params_lora_t *params)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     const uint8_t buf[SX126X_SIZE_SET_MODULATION_PARAMS_LORA] = {
             SX126X_SET_MODULATION_PARAMS, (uint8_t) (params->sf), (uint8_t) (params->bw),
             (uint8_t) (params->cr), (uint8_t) (params->ldro & 0x01),
     };
 
-    status = (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_MODULATION_PARAMS_LORA, nullptr, 0);
+    status = hal->write(buf, SX126X_SIZE_SET_MODULATION_PARAMS_LORA, nullptr, 0);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         // WORKAROUND - Modulation Quality with 500 kHz LoRa Bandwidth, see datasheet DS_SX1261-2_V1.2 §15.1
         status = tx_modulation_workaround(SX126X_PKT_TYPE_LORA, params->bw);
         // WORKAROUND END
@@ -650,7 +650,7 @@ sx126x_status_t sx126x::set_lora_mod_params(sx126x_mod_params_lora_t *params)
     return status;
 }
 
-sx126x_status_t sx126x::set_gfsk_pkt_params(sx126x_pkt_params_gfsk_t *params)
+radio::ret sx126x::set_gfsk_pkt_params(sx126x_pkt_params_gfsk_t *params)
 {
     const uint8_t buf[SX126X_SIZE_SET_PKT_PARAMS_GFSK] = {
             SX126X_SET_PKT_PARAMS,
@@ -665,12 +665,12 @@ sx126x_status_t sx126x::set_gfsk_pkt_params(sx126x_pkt_params_gfsk_t *params)
             (uint8_t) (params->dc_free),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_PKT_PARAMS_GFSK, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_PKT_PARAMS_GFSK, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_lora_pkt_params(sx126x_pkt_params_lora_t *params)
+radio::ret sx126x::set_lora_pkt_params(sx126x_pkt_params_lora_t *params)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
     const uint8_t buf[SX126X_SIZE_SET_PKT_PARAMS_LORA] = {
             SX126X_SET_PKT_PARAMS,
@@ -682,14 +682,14 @@ sx126x_status_t sx126x::set_lora_pkt_params(sx126x_pkt_params_lora_t *params)
             (uint8_t) (params->invert_iq_is_on ? 1 : 0),
     };
 
-    status = (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_PKT_PARAMS_LORA, nullptr, 0);
+    status = hal->write(buf, SX126X_SIZE_SET_PKT_PARAMS_LORA, nullptr, 0);
 
     // WORKAROUND - Optimizing the Inverted IQ Operation, see datasheet DS_SX1261-2_V1.2 §15.4
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         uint8_t reg_value = 0;
 
         status = read_register(SX126X_REG_IQ_POLARITY, &reg_value, 1);
-        if (status == SX126X_STATUS_OK) {
+        if (status == radio::ret::OK) {
             if (params->invert_iq_is_on) {
                 reg_value &= ~(1 << 2);  // Bit 2 set to 0 when using inverted IQ polarity
             } else {
@@ -703,7 +703,7 @@ sx126x_status_t sx126x::set_lora_pkt_params(sx126x_pkt_params_lora_t *params)
     return status;
 }
 
-sx126x_status_t sx126x::set_cad_params(sx126x_cad_params_t *params)
+radio::ret sx126x::set_cad_params(sx126x_cad_params_t *params)
 {
     const uint8_t buf[SX126X_SIZE_SET_CAD_PARAMS] = {
             SX126X_SET_CAD_PARAMS,
@@ -716,10 +716,10 @@ sx126x_status_t sx126x::set_cad_params(sx126x_cad_params_t *params)
             (uint8_t) (params->cad_timeout >> 0),
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_CAD_PARAMS, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_CAD_PARAMS, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_buffer_base_address(const uint8_t tx_base_address,
+radio::ret sx126x::set_buffer_base_address(const uint8_t tx_base_address,
                                                 const uint8_t rx_base_address)
 {
     const uint8_t buf[SX126X_SIZE_SET_BUFFER_BASE_ADDRESS] = {
@@ -728,12 +728,12 @@ sx126x_status_t sx126x::set_buffer_base_address(const uint8_t tx_base_address,
             rx_base_address,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_BUFFER_BASE_ADDRESS, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_SET_BUFFER_BASE_ADDRESS, nullptr, 0);
 }
 
-sx126x_status_t sx126x::set_lora_symb_nb_timeout(const uint8_t nb_of_symbs)
+radio::ret sx126x::set_lora_symb_nb_timeout(const uint8_t nb_of_symbs)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t exp = 0;
     uint8_t mant =
             (((nb_of_symbs > SX126X_MAX_LORA_SYMB_NUM_TIMEOUT) ? SX126X_MAX_LORA_SYMB_NUM_TIMEOUT : nb_of_symbs) +
@@ -750,9 +750,9 @@ sx126x_status_t sx126x::set_lora_symb_nb_timeout(const uint8_t nb_of_symbs)
             (uint8_t) (mant << (2 * exp + 1)),
     };
 
-    status = (sx126x_status_t) hal->write(buf, SX126X_SIZE_SET_LORA_SYMB_NUM_TIMEOUT, nullptr, 0);
+    status = hal->write(buf, SX126X_SIZE_SET_LORA_SYMB_NUM_TIMEOUT, nullptr, 0);
 
-    if ((status == SX126X_STATUS_OK) && (nb_of_symbs > 0)) {
+    if ((status == radio::ret::OK) && (nb_of_symbs > 0)) {
         uint8_t reg = exp + (mant << 3);
         status = write_register(SX126X_REG_LR_SYNCH_TIMEOUT, &reg, 1);
     }
@@ -764,17 +764,17 @@ sx126x_status_t sx126x::set_lora_symb_nb_timeout(const uint8_t nb_of_symbs)
 // Communication Status Information
 //
 
-sx126x_status_t sx126x::get_status(sx126x_chip_status_t *radio_status)
+radio::ret sx126x::get_status(sx126x_chip_status_t *radio_status)
 {
     const uint8_t buf[SX126X_SIZE_GET_STATUS] = {
             SX126X_GET_STATUS,
     };
     uint8_t status_local = 0;
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_STATUS, &status_local, 1);
+    status = hal->read(buf, SX126X_SIZE_GET_STATUS, &status_local, 1);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         radio_status->cmd_status =
                 (sx126x_cmd_status_t) ((status_local & SX126X_CMD_STATUS_MASK) >> SX126X_CMD_STATUS_POS);
         radio_status->chip_mode =
@@ -784,18 +784,18 @@ sx126x_status_t sx126x::get_status(sx126x_chip_status_t *radio_status)
     return status;
 }
 
-sx126x_status_t sx126x::get_rx_buffer_status(sx126x_rx_buffer_status_t *rx_buffer_status)
+radio::ret sx126x::get_rx_buffer_status(sx126x_rx_buffer_status_t *rx_buffer_status)
 {
     const uint8_t buf[SX126X_SIZE_GET_RX_BUFFER_STATUS] = {
             SX126X_GET_RX_BUFFER_STATUS,
             SX126X_NOP,
     };
     uint8_t status_local[sizeof(sx126x_rx_buffer_status_t)] = {0x00};
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_RX_BUFFER_STATUS, status_local, sizeof(sx126x_rx_buffer_status_t));
+    status = hal->read(buf, SX126X_SIZE_GET_RX_BUFFER_STATUS, status_local, sizeof(sx126x_rx_buffer_status_t));
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         rx_buffer_status->pld_len_in_bytes = status_local[0];
         rx_buffer_status->buffer_start_pointer = status_local[1];
     }
@@ -803,18 +803,18 @@ sx126x_status_t sx126x::get_rx_buffer_status(sx126x_rx_buffer_status_t *rx_buffe
     return status;
 }
 
-sx126x_status_t sx126x::get_gfsk_pkt_status(sx126x_pkt_status_gfsk_t *pkt_status)
+radio::ret sx126x::get_gfsk_pkt_status(sx126x_pkt_status_gfsk_t *pkt_status)
 {
     const uint8_t buf[SX126X_SIZE_GET_PKT_STATUS] = {
             SX126X_GET_PKT_STATUS,
             SX126X_NOP,
     };
     uint8_t pkt_status_local[3] = {0x00};
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_PKT_STATUS, pkt_status_local, 3);
+    status = hal->read(buf, SX126X_SIZE_GET_PKT_STATUS, pkt_status_local, 3);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         pkt_status->rx_status.pkt_sent =
                 ((pkt_status_local[0] & SX126X_GFSK_RX_STATUS_PKT_SENT_MASK) != 0);
         pkt_status->rx_status.pkt_received =
@@ -835,58 +835,58 @@ sx126x_status_t sx126x::get_gfsk_pkt_status(sx126x_pkt_status_gfsk_t *pkt_status
     return status;
 }
 
-sx126x_status_t sx126x::get_lora_pkt_status(sx126x_pkt_status_lora_t *pkt_status)
+radio::ret sx126x::get_lora_pkt_status(sx126x_pkt_status_lora_t *pkt_status)
 {
     const uint8_t buf[SX126X_SIZE_GET_PKT_STATUS] = {
             SX126X_GET_PKT_STATUS,
             SX126X_NOP,
     };
     uint8_t pkt_status_local[sizeof(sx126x_pkt_status_lora_t)] = {0x00};
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_PKT_STATUS, pkt_status_local,
+    status = hal->read(buf, SX126X_SIZE_GET_PKT_STATUS, pkt_status_local,
                                                sizeof(sx126x_pkt_status_lora_t));
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         pkt_status->rssi_pkt_in_dbm = (int8_t) (-pkt_status_local[0] >> 1);
-        pkt_status->snr_pkt_in_db = (((int8_t) pkt_status_local[1]) + 2) >> 2;
+        pkt_status->snr_pkt_in_db = (int8_t)((((int8_t) pkt_status_local[1]) + 2) >> 2);
         pkt_status->signal_rssi_pkt_in_dbm = (int8_t) (-pkt_status_local[2] >> 1);
     }
 
     return status;
 }
 
-sx126x_status_t sx126x::get_rssi_inst(int16_t *rssi_in_dbm)
+radio::ret sx126x::get_rssi_inst(int16_t *rssi_in_dbm)
 {
     const uint8_t buf[SX126X_SIZE_GET_RSSI_INST] = {
             SX126X_GET_RSSI_INST,
             SX126X_NOP,
     };
     uint8_t rssi_local = 0x00;
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_RSSI_INST, &rssi_local, 1);
+    status = hal->read(buf, SX126X_SIZE_GET_RSSI_INST, &rssi_local, 1);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         *rssi_in_dbm = (int8_t) (-rssi_local >> 1);
     }
 
     return status;
 }
 
-sx126x_status_t sx126x::get_gfsk_stats(sx126x_stats_gfsk_t *stats)
+radio::ret sx126x::get_gfsk_stats(sx126x_stats_gfsk_t *stats)
 {
     const uint8_t buf[SX126X_SIZE_GET_STATS] = {
             SX126X_GET_STATS,
             SX126X_NOP,
     };
     uint8_t stats_local[sizeof(sx126x_stats_gfsk_t)] = {0};
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_STATS, stats_local,
+    status = hal->read(buf, SX126X_SIZE_GET_STATS, stats_local,
                                                sizeof(sx126x_stats_gfsk_t));
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         stats->nb_pkt_received = ((uint16_t) stats_local[0] << 8) + (uint16_t) stats_local[1];
         stats->nb_pkt_crc_error = ((uint16_t) stats_local[2] << 8) + (uint16_t) stats_local[3];
         stats->nb_pkt_len_error = ((uint16_t) stats_local[4] << 8) + (uint16_t) stats_local[5];
@@ -895,19 +895,19 @@ sx126x_status_t sx126x::get_gfsk_stats(sx126x_stats_gfsk_t *stats)
     return status;
 }
 
-sx126x_status_t sx126x::get_lora_stats(sx126x_stats_lora_t *stats)
+radio::ret sx126x::get_lora_stats(sx126x_stats_lora_t *stats)
 {
     const uint8_t buf[SX126X_SIZE_GET_STATS] = {
             SX126X_GET_STATS,
             SX126X_NOP,
     };
     uint8_t stats_local[sizeof(sx126x_stats_lora_t)] = {0};
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_STATS, stats_local,
+    status = hal->read(buf, SX126X_SIZE_GET_STATS, stats_local,
                                                sizeof(sx126x_stats_lora_t));
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         stats->nb_pkt_received = ((uint16_t) stats_local[0] << 8) + (uint16_t) stats_local[1];
         stats->nb_pkt_crc_error = ((uint16_t) stats_local[2] << 8) + (uint16_t) stats_local[3];
         stats->nb_pkt_header_error = ((uint16_t) stats_local[4] << 8) + (uint16_t) stats_local[5];
@@ -915,13 +915,13 @@ sx126x_status_t sx126x::get_lora_stats(sx126x_stats_lora_t *stats)
     return status;
 }
 
-sx126x_status_t sx126x::reset_stats()
+radio::ret sx126x::reset_stats()
 {
     const uint8_t buf[SX126X_SIZE_RESET_STATS] = {
             SX126X_RESET_STATS, SX126X_NOP, SX126X_NOP, SX126X_NOP, SX126X_NOP, SX126X_NOP, SX126X_NOP,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_RESET_STATS, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_RESET_STATS, nullptr, 0);
 }
 
 //
@@ -938,26 +938,26 @@ bool sx126x::wakeup()
     return hal->wakeup();
 }
 
-sx126x_status_t sx126x::get_device_errors(sx126x_errors_mask_t *errors)
+radio::ret sx126x::get_device_errors(sx126x_errors_mask_t *errors)
 {
     const uint8_t buf[SX126X_SIZE_GET_DEVICE_ERRORS] = {
             SX126X_GET_DEVICE_ERRORS,
             SX126X_NOP,
     };
     uint8_t errors_local[sizeof(sx126x_errors_mask_t)] = {0x00};
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
-    status = (sx126x_status_t) hal->read(buf, SX126X_SIZE_GET_DEVICE_ERRORS, errors_local,
+    status = hal->read(buf, SX126X_SIZE_GET_DEVICE_ERRORS, errors_local,
                                                sizeof(sx126x_errors_mask_t));
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         *errors = ((sx126x_errors_mask_t) errors_local[0] << 8) + ((sx126x_errors_mask_t) errors_local[1] << 0);
     }
 
     return status;
 }
 
-sx126x_status_t sx126x::clear_device_errors()
+radio::ret sx126x::clear_device_errors()
 {
     const uint8_t buf[SX126X_SIZE_CLR_DEVICE_ERRORS] = {
             SX126X_CLR_DEVICE_ERRORS,
@@ -965,19 +965,19 @@ sx126x_status_t sx126x::clear_device_errors()
             SX126X_NOP,
     };
 
-    return (sx126x_status_t) hal->write(buf, SX126X_SIZE_CLR_DEVICE_ERRORS, nullptr, 0);
+    return hal->write(buf, SX126X_SIZE_CLR_DEVICE_ERRORS, nullptr, 0);
 }
 
-sx126x_status_t sx126x::get_gfsk_bw_param(const uint32_t bw, uint8_t *param)
+radio::ret sx126x::get_gfsk_bw_param(const uint32_t bw, uint8_t *param)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
 
     if (bw != 0) {
-        status = SX126X_STATUS_UNKNOWN_VALUE;
+        status = radio::ret::UNKNOWN_VALUE;
         for (uint8_t i = 0; i < (sizeof(gfsk_bw) / sizeof(gfsk_bw_t)); i++) {
             if (bw <= gfsk_bw[i].bw) {
                 *param = gfsk_bw[i].param;
-                status = SX126X_STATUS_OK;
+                status = radio::ret::OK;
                 break;
             }
         }
@@ -1091,9 +1091,9 @@ uint32_t sx126x::get_gfsk_time_on_air_in_ms(const sx126x_pkt_params_gfsk_t *pkt_
     return (numerator + denominator - 1) / denominator;
 }
 
-sx126x_status_t sx126x::get_random_numbers(uint32_t *numbers, unsigned int n)
+radio::ret sx126x::get_random_numbers(uint32_t *numbers, unsigned int n)
 {
-    sx126x_status_t status;
+    radio::ret status;
 
     uint8_t tmp_ana_lna = 0x00;
     uint8_t tmp_ana_mixer = 0x00;
@@ -1101,47 +1101,47 @@ sx126x_status_t sx126x::get_random_numbers(uint32_t *numbers, unsigned int n)
 
     // Configure for random number generation
     status = read_register(SX126X_REG_ANA_LNA, &tmp_ana_lna, 1);
-    if (status != SX126X_STATUS_OK) {
+    if (status != radio::ret::OK) {
         return status;
     }
     tmp = tmp_ana_lna & ~(1 << 0);
     status = write_register(SX126X_REG_ANA_LNA, &tmp, 1);
-    if (status != SX126X_STATUS_OK) {
+    if (status != radio::ret::OK) {
         return status;
     }
 
     status = read_register(SX126X_REG_ANA_MIXER, &tmp_ana_mixer, 1);
-    if (status != SX126X_STATUS_OK) {
+    if (status != radio::ret::OK) {
         return status;
     }
     tmp = tmp_ana_mixer & ~(1 << 7);
     status = write_register(SX126X_REG_ANA_MIXER, &tmp, 1);
-    if (status != SX126X_STATUS_OK) {
+    if (status != radio::ret::OK) {
         return status;
     }
 
     // Start RX continuous
     status = set_rx_with_timeout_in_rtc_step(SX126X_RX_CONTINUOUS);
-    if (status != SX126X_STATUS_OK) {
+    if (status != radio::ret::OK) {
         return status;
     }
 
     // Store values
     for (unsigned int i = 0; i < n; i++) {
         status = read_register(SX126X_REG_RNGBASEADDRESS, (uint8_t *) &numbers[i], 4);
-        if (status != SX126X_STATUS_OK) {
+        if (status != radio::ret::OK) {
             return status;
         }
     }
 
     status = set_standby(SX126X_STANDBY_CFG_RC);
-    if (status != SX126X_STATUS_OK) {
+    if (status != radio::ret::OK) {
         return status;
     }
 
     // Restore registers
     status = write_register(SX126X_REG_ANA_LNA, &tmp_ana_lna, 1);
-    if (status != SX126X_STATUS_OK) {
+    if (status != radio::ret::OK) {
         return status;
     }
     status = write_register(SX126X_REG_ANA_MIXER, &tmp_ana_mixer, 1);
@@ -1173,7 +1173,7 @@ uint32_t sx126x::convert_timeout_in_ms_to_rtc_step(uint32_t timeout_in_ms)
 // Registers access
 //
 
-sx126x_status_t sx126x::cfg_rx_boosted(const bool state)
+radio::ret sx126x::cfg_rx_boosted(const bool state)
 {
     if (state == true) {
         return write_register(SX126X_REG_RXGAIN, (const uint8_t[]) {0x96}, 1);
@@ -1182,9 +1182,9 @@ sx126x_status_t sx126x::cfg_rx_boosted(const bool state)
     }
 }
 
-sx126x_status_t sx126x::set_gfsk_sync_word(uint8_t *sync_word, const uint8_t sync_word_len)
+radio::ret sx126x::set_gfsk_sync_word(uint8_t *sync_word, const uint8_t sync_word_len)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t buf[8] = {0};
 
     if (sync_word_len <= 8) {
@@ -1195,14 +1195,14 @@ sx126x_status_t sx126x::set_gfsk_sync_word(uint8_t *sync_word, const uint8_t syn
     return status;
 }
 
-sx126x_status_t sx126x::set_lora_sync_word(const uint8_t sync_word)
+radio::ret sx126x::set_lora_sync_word(const uint8_t sync_word)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t buffer[2] = {0x00};
 
     status = read_register(SX126X_REG_LR_SYNCWORD, buffer, 2);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         buffer[0] = (buffer[0] & ~0xF0) + (sync_word & 0xF0);
         buffer[1] = (buffer[1] & ~0xF0) + ((sync_word & 0x0F) << 4);
 
@@ -1212,32 +1212,32 @@ sx126x_status_t sx126x::set_lora_sync_word(const uint8_t sync_word)
     return status;
 }
 
-sx126x_status_t sx126x::set_gfsk_crc_seed(uint16_t seed)
+radio::ret sx126x::set_gfsk_crc_seed(uint16_t seed)
 {
     uint8_t s[] = {(uint8_t) (seed >> 8), (uint8_t) seed};
 
     return write_register(SX126X_REG_CRCSEEDBASEADDRESS, s, sizeof(s));
 }
 
-sx126x_status_t sx126x::set_gfsk_crc_polynomial(const uint16_t polynomial)
+radio::ret sx126x::set_gfsk_crc_polynomial(const uint16_t polynomial)
 {
     uint8_t poly[] = {(uint8_t) (polynomial >> 8), (uint8_t) polynomial};
 
     return write_register(SX126X_REG_CRCPOLYBASEADDRESS, poly, sizeof(poly));
 }
 
-sx126x_status_t sx126x::set_gfsk_whitening_seed(const uint16_t seed)
+radio::ret sx126x::set_gfsk_whitening_seed(const uint16_t seed)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t reg_value = 0;
 
     // The SX126X_REG_WHITSEEDBASEADDRESS @ref LSBit is used for the seed value. The 7 MSBits must not be modified.
     // Thus, we first need to read the current value and then change the LSB according to the provided seed @ref value.
     status = read_register(SX126X_REG_WHITSEEDBASEADDRESS, &reg_value, 1);
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         reg_value = (reg_value & 0xFE) | ((uint8_t) (seed >> 8) & 0x01);
         status = write_register(SX126X_REG_WHITSEEDBASEADDRESS, &reg_value, 1);
-        if (status == SX126X_STATUS_OK) {
+        if (status == radio::ret::OK) {
             reg_value = (uint8_t) seed;
             status = write_register(SX126X_REG_WHITSEEDBASEADDRESS + 1, &reg_value, 1);
         }
@@ -1246,14 +1246,14 @@ sx126x_status_t sx126x::set_gfsk_whitening_seed(const uint16_t seed)
     return status;
 }
 
-sx126x_status_t sx126x::cfg_tx_clamp()
+radio::ret sx126x::cfg_tx_clamp()
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t reg_value = 0x00;
 
     status = read_register(SX126X_REG_TX_CLAMP_CFG, &reg_value, 1);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         reg_value |= SX126X_REG_TX_CLAMP_CFG_MASK;
         status = write_register(SX126X_REG_TX_CLAMP_CFG, &reg_value, 1);
     }
@@ -1261,18 +1261,18 @@ sx126x_status_t sx126x::cfg_tx_clamp()
     return status;
 }
 
-sx126x_status_t sx126x::stop_rtc()
+radio::ret sx126x::stop_rtc()
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t reg_value = 0;
 
     reg_value = 0;
     status = write_register(SX126X_REG_RTC_CTRL, &reg_value, 1);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         status = read_register(SX126X_REG_EVT_CLR, &reg_value, 1);
 
-        if (status == SX126X_STATUS_OK) {
+        if (status == radio::ret::OK) {
             reg_value |= SX126X_REG_EVT_CLR_TIMEOUT_MASK;
             status = write_register(SX126X_REG_EVT_CLR, &reg_value, 1);
         }
@@ -1281,28 +1281,27 @@ sx126x_status_t sx126x::stop_rtc()
     return status;
 }
 
-sx126x_status_t sx126x::set_ocp_value(const uint8_t ocp_in_step_of_2_5_ma)
+radio::ret sx126x::set_ocp_value(const uint8_t ocp_in_step_of_2_5_ma)
 {
-    return (sx126x_status_t) write_register(SX126X_REG_OCP, &ocp_in_step_of_2_5_ma, 1);
+    return write_register(SX126X_REG_OCP, &ocp_in_step_of_2_5_ma, 1);
 }
 
-sx126x_status_t sx126x::set_trimming_capacitor_values(const uint8_t trimming_cap_xta,
+radio::ret sx126x::set_trimming_capacitor_values(const uint8_t trimming_cap_xta,
                                                       const uint8_t trimming_cap_xtb)
 {
     uint8_t trimming_capacitor_values[2] = {trimming_cap_xta, trimming_cap_xtb};
 
-    return (sx126x_status_t) write_register(SX126X_REG_XTATRIM, trimming_capacitor_values, 2);
+    return write_register(SX126X_REG_XTATRIM, trimming_capacitor_values, 2);
 }
 
-sx126x_status_t sx126x::add_registers_to_retention_list(uint16_t *register_addr,
-                                                        uint8_t register_nb)
+radio::ret sx126x::add_registers_to_retention_list(uint16_t *register_addr, uint8_t register_nb)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t buffer[9];
 
     status = read_register(SX126X_REG_RETENTION_LIST_BASE_ADDRESS, buffer, 9);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         const uint8_t initial_nb_of_registers = buffer[0];
         uint8_t *register_list = &buffer[1];
 
@@ -1323,7 +1322,7 @@ sx126x_status_t sx126x::add_registers_to_retention_list(uint16_t *register_addr,
                     register_list[2 * buffer[0] + 1] = (uint8_t) (register_addr[index] >> 0);
                     buffer[0] += 1;
                 } else {
-                    return SX126X_STATUS_ERROR;
+                    return radio::ret::ERROR;
                 }
             }
         }
@@ -1336,7 +1335,7 @@ sx126x_status_t sx126x::add_registers_to_retention_list(uint16_t *register_addr,
     return status;
 }
 
-sx126x_status_t sx126x::init_retention_list()
+radio::ret sx126x::init_retention_list()
 {
     const uint16_t list_of_registers[3] = {SX126X_REG_RXGAIN, SX126X_REG_TX_MODULATION, SX126X_REG_IQ_POLARITY};
 
@@ -1344,20 +1343,20 @@ sx126x_status_t sx126x::init_retention_list()
                                            sizeof(list_of_registers) / sizeof(list_of_registers[0]));
 }
 
-sx126x_status_t sx126x::get_lora_params_from_header(sx126x_lora_cr_t *cr, bool *crc_is_on)
+radio::ret sx126x::get_lora_params_from_header(sx126x_lora_cr_t *cr, bool *crc_is_on)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t buffer_cr;
     uint8_t buffer_crc;
 
     status = read_register(SX126X_REG_LR_HEADER_CR, &buffer_cr, 1);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         status = read_register(SX126X_REG_LR_HEADER_CRC, &buffer_crc, 1);
 
-        if (status == SX126X_STATUS_OK) {
+        if (status == radio::ret::OK) {
             *cr = (sx126x_lora_cr_t) ((buffer_cr & SX126X_REG_LR_HEADER_CR_MASK) >> SX126X_REG_LR_HEADER_CR_POS);
-            *crc_is_on = ((buffer_crc & SX126X_REG_LR_HEADER_CRC_MASK) != 0) ? true : false;
+            *crc_is_on = ((buffer_crc & SX126X_REG_LR_HEADER_CRC_MASK) != 0);
         }
     }
 
@@ -1369,14 +1368,14 @@ sx126x_status_t sx126x::get_lora_params_from_header(sx126x_lora_cr_t *cr, bool *
  * --- PRIVATE FUNCTIONS DEFINITION --------------------------------------------
  */
 
-sx126x_status_t sx126x::tx_modulation_workaround(sx126x_pkt_type_t pkt_type, sx126x_lora_bw_t bw)
+radio::ret sx126x::tx_modulation_workaround(sx126x_pkt_type_t pkt_type, sx126x_lora_bw_t bw)
 {
-    sx126x_status_t status = SX126X_STATUS_ERROR;
+    radio::ret status = radio::ret::ERROR;
     uint8_t reg_value = 0;
 
     status = read_register(SX126X_REG_TX_MODULATION, &reg_value, 1);
 
-    if (status == SX126X_STATUS_OK) {
+    if (status == radio::ret::OK) {
         if (pkt_type == SX126X_PKT_TYPE_LORA) {
             if (bw == SX126X_LORA_BW_500) {
                 reg_value &= ~(1 << 2);  // Bit 2 set to 0 if the LoRa BW = 500 kHz
