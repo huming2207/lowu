@@ -13,6 +13,11 @@
     model = "Lowu Laojie";
     compatible = "lowu,laojie";
 
+    aliases {
+		lora0 = &lora;
+        radiospi = &subghzspi;
+	};
+
     chosen {
         zephyr,console = &usart1;
         // zephyr,shell-uart = &usart1;
