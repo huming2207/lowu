@@ -4,7 +4,10 @@
 
 #include <stm32wlxx_ll_exti.h>
 #include <stm32wlxx_ll_rcc.h>
-#include <logging/log.h>
+
+#define LOG_LEVEL CONFIG_LOG_DEFAULT_LEVEL
+#include <zephyr/logging/log.h>
+LOG_MODULE_REGISTER(subghz_hal);
 
 zephyr_stm32wl::zephyr_stm32wl()
 {
@@ -90,5 +93,10 @@ radio::ret zephyr_stm32wl::read(const uint8_t *cmd, const uint16_t cmd_len, uint
 
 radio::ret zephyr_stm32wl::init()
 {
+    if (!device_is_ready(lora_spi.bus)) {
+        LOG_ERR("SUBGHZ SPI is not ready!");
+        return radio::ERROR;
+    }
+
     return radio::OK;
 }

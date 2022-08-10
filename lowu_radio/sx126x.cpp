@@ -928,12 +928,12 @@ radio::ret sx126x::reset_stats()
 // Miscellaneous
 //
 
-bool sx126x::reset()
+radio::ret sx126x::reset()
 {
     return hal->reset();
 }
 
-bool sx126x::wakeup()
+radio::ret sx126x::wakeup()
 {
     return hal->wakeup();
 }

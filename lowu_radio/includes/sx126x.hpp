@@ -1203,7 +1203,7 @@ public:
      *
      * @returns Operation status
      */
-    bool reset();
+    radio::ret reset();
 
     /**
      * @brief Wake the radio up from sleep mode.
@@ -1212,7 +1212,7 @@ public:
      *
      * @returns Operation status
      */
-    bool wakeup();
+    radio::ret wakeup();
 
     /**
      * @brief Get the list of all active errors
