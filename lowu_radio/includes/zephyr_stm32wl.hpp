@@ -9,12 +9,7 @@
 class zephyr_stm32wl : public radio_hal
 {
 public:
-    static zephyr_stm32wl *instance()
-    {
-        static zephyr_stm32wl _instance;
-        return &_instance;
-    }
-
+    static zephyr_stm32wl *instance();
     void operator=(zephyr_stm32wl const&) = delete;
     zephyr_stm32wl(zephyr_stm32wl const&) = delete;
 

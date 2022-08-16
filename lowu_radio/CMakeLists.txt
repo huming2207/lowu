@@ -12,6 +12,8 @@ if (ZEPHYR_BASE)
             "../zephyr_stm32wl.cpp" "../includes/zephyr_stm32wl.hpp"
             "../sx12xx.cpp" "../sx126x.cpp" "../sx126x_regs.hpp" "../includes/sx12xx.hpp" "../includes/sx126x.hpp"
     )
+
+    zephyr_library_compile_options(-std=c++17 -fno-threadsafe-statics)
 elseif(ESP_PLATFORM)
     # TODO
 endif()

@@ -100,3 +100,9 @@ radio::ret zephyr_stm32wl::init()
 
     return radio::OK;
 }
+
+zephyr_stm32wl *zephyr_stm32wl::instance()
+{
+    static zephyr_stm32wl _instance;
+    return &_instance;
+}
