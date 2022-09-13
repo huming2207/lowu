@@ -24,7 +24,7 @@ mod app {
     // Local resources go here
     #[local]
     struct Local {
-        uart: Uart1<pins::B7, pins::B6>,
+        
         // TODO: Add resources
     }
 
@@ -49,7 +49,7 @@ mod app {
         let gpiob: PortB = PortB::split(dp.GPIOB, &mut dp.RCC);
         let mut uart: Uart1<pins::B7, pins::B6> = Uart1::new(dp.USART1, 115200, uart::Clk::Hsi16, &mut dp.RCC).enable_tx(gpiob.b6, cs).enable_rx(gpiob.b7, cs);
         cortex_m::prelude::_embedded_hal_serial_Write::write(&mut uart, 85);
-    
+        defmt_serial::defmt_serial(uart);
 
         defmt::warn!("init");
 
@@ -59,10 +59,10 @@ mod app {
         // Setup the monotonic timer
         (
             Shared {
+                
                 // Initialization of shared resources go here
             },
             Local {
-                uart,
             },
             init::Monotonics(
                 // Initialization of optional monotonic timers go here
@@ -70,11 +70,8 @@ mod app {
         )
     }
 
-    #[idle(local=[uart])]
+    #[idle]
     fn idle(ctx: idle::Context) -> ! {
-        let uart = ctx.local.uart;
-        defmt_serial::defmt_serial!(uart, &mut uart::Uart1<pins::B7, pins::B6>);
-
         defmt::info!("idle");
 
         loop {
